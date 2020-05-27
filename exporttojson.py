@@ -47,10 +47,14 @@ def process_message(s):
 
 
 
-if len(sys.argv) != 3:
+if len(sys.argv) not in [2, 3]:
     print("Wrong format")
     print("Format: exporttojson.py [source txt file] [result JSON file]")
+    print("\tOR")
+    print("Format: exporttojson.py [source txt file]")
+    print("This prints out the JSON to stdout")
     exit(-1)
+
 
 try:
     with open(sys.argv[1], "r") as f:
@@ -65,8 +69,11 @@ try:
         # Convert to dicts for JSON serialization
         message_dicts = [m.__dict__ for m in messages]
 
-        with open(sys.argv[2], "w") as fw:
-            fw.write(json.dumps(message_dicts))
+        if len(sys.argv) == 3:
+            with open(sys.argv[2], "w") as fw:
+                fw.write(json.dumps(message_dicts))
+        else:
+            print(json.dumps(message_dicts))
     
 
 except Exception as e:
